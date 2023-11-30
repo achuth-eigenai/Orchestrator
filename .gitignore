@@ -1,0 +1,33 @@
+# IntelliJ IDEA
+.idea/
+
+# Gradle
+.gradle/
+/build/
+
+# Spring Boot
+/target/
+*.jar
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE-specific files
+*.iml
+*.ipr
+*.iws
+
+# Compiled files
+*.class
+
+# Package files
+*.war
+*.ear
+
+# Dependency directories
+/target/
+/bin/
