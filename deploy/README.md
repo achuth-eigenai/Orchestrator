@@ -1,24 +1,53 @@
-# Deploy
-Not Technical? Don't worry. It's all going to be okay, just follow this document fully. 
+# Pre-requesits
 
-## Prerequisites
-#### Step 1
-Install terraform - refer [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-#### Step 2
+## Profile set up.
+
+create your profile in your ~/.aws/credentials file against each environment.
+
+## Key Pair
+
+for fresh account deployment the ecs-infra requires you to have a keypair created under ec2.
+
+## Deployment
+
+### Non Prod:
+
 ```shell
-$ ./deploy.sh
+$ ./vpc-infra.sh -s dev -r ap-southeast-1
+$ ./ecs-infra.sh -s dev -r ap-southeast-1 -a 828109562156
+$ ./release.sh -r ap-southeast-1 -a 828109562156
 ```
 
-# FAQ
-#### I am launching into a new region or new AWS account or even recreating from scratch. What do I do?
-No worries, the script will take care.
+One of the issues of connecting to the standard deployment ECS is the ability to pull the image off ECR. To be able to
+do that the EC2 instance one might have to follow one of the three approaches:
 
-#### Eigen AI is several years old now, the Amazon AMI is deprecated and has serious security issues, I have to upgrade the ami but I am non-technical how do I find out which ami to use?
-```shell
-aws ec2 describe-images \
-  --owners 099720109477 \
-  --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*" "Name=architecture,Values=x86_64" "Name=state,Values=available" "Name=virtualization-type,Values=hvm" "Name=root-device-type,Values=ebs" \
-  --query 'Images[0].ImageId' \
-  --region ap-southeast-1
-```
+- use a public subnet for EC2
+- complement with a NAT Gateway
+- VPC Endpoint, ECS to ECR.
 
+  With the second & third approach there is a small price ($35+ per month) which can be avoided for Non Prod
+  Environments. Hence we use a public subnet with appropriate SecurityGroup restrictions in place for our Non-Prods. In
+  production however, we will use a NAT Gateway.
+
+## What to do on Non-Prod deployments?
+
+After the cloudformation deployment - just make the below changes by hand.
+```Note:``` You may need to revert these settings to apply a cloudformation change-set.
+
+### Public IPv4 address in Subnet.
+
+![](../misc/images/modify-auto-assign-ip-setting.png)
+
+### Subnet View
+
+![](../misc/images/subnet.jpg)
+
+### Running the deployment from outside pipeline.
+
+![](../misc/images/run.jpg)
+
+# TODO
+
+* Add right policy for the ECS role.
+* Add a VPC Endpoint.
+* chane to terraform
