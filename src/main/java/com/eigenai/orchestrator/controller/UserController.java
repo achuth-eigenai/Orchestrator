@@ -16,7 +16,7 @@ import static com.eigenai.orchestrator.domain.Status.SUCCESS;
  */
 @RestController
 @OpenAPIDefinition
-@RequestMapping("/user")
+@RequestMapping("v1/user")
 public class UserController {
 	@Autowired
 	private UserService userService;
@@ -24,12 +24,12 @@ public class UserController {
 	/**
 	 * Create user user.
 	 *
-	 * @param userInput the user input
+	 * @param user the user input
 	 * @return the user
 	 */
 	@PostMapping("/")
-	public ResponseEntity<User> createOrUpdateUser(@RequestBody User userInput) {
-		return ResponseEntity.ok(userService.createOrUpdate(userInput));
+	public ResponseEntity<User> createOrUpdateUser(@RequestBody User user) {
+		return ResponseEntity.ok(userService.createOrUpdate(user));
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class UserController {
 	 * @return the user
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<User> getUser(@PathVariable String username) {
+	public ResponseEntity<User> userInfo(@PathVariable String username) {
 		return ResponseEntity.ok(userService.getByUsername(username));
 	}
 
@@ -52,5 +52,16 @@ public class UserController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Response> deleteUser(@PathVariable Long id) {
 		return ResponseEntity.ok(Response.builder().status(SUCCESS).build());
+	}
+
+	/**
+	 * Login response entity.
+	 *
+	 * @param user the user
+	 * @return the response entity
+	 */
+	@PostMapping("/login")
+	public ResponseEntity<User> login(@RequestBody User user) {
+		return ResponseEntity.ok(User.builder().build());
 	}
 }

@@ -14,7 +14,7 @@ import static com.eigenai.orchestrator.domain.Status.SUCCESS;
  * The type Rfm model controller.
  */
 @RestController
-@RequestMapping("/rfm")
+@RequestMapping("v1/rfm")
 public class RFMModelController {
     /**
      * Perform rfm analysis response entity.

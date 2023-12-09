@@ -16,7 +16,7 @@ import static com.eigenai.orchestrator.domain.Status.SUCCESS;
  * The type Churn model controller.
  */
 @RestController
-@RequestMapping("/account")
+@RequestMapping("v1/account")
 public class AccountController {
     @Autowired
     private AccountService accountService;

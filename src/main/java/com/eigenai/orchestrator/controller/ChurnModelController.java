@@ -11,7 +11,7 @@ import static com.eigenai.orchestrator.domain.Status.SUCCESS;
  * The type Churn model controller.
  */
 @RestController
-@RequestMapping("/churn")
+@RequestMapping("v1/churn")
 public class ChurnModelController {
     /**
      * Create or update churn model response entity.

@@ -3,7 +3,6 @@ package com.eigenai.orchestrator.controller;
 import com.eigenai.orchestrator.domain.Account;
 import com.eigenai.orchestrator.domain.PaymentPlan;
 import com.eigenai.orchestrator.domain.PaymentPlan;
-import com.eigenai.orchestrator.service.PaymentPlanService;
 import com.eigenai.orchestrator.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import static com.eigenai.orchestrator.domain.Status.SUCCESS;
  * The type Churn model controller.
  */
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("v1/payment")
 public class PaymentController {
     /**
      * Create payment payment.
