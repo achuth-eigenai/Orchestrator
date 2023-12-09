@@ -1,5 +1,6 @@
-package com.eigenai.orchestrator.model;
+package com.eigenai.orchestrator.domain;
 
+import com.eigenai.orchestrator.domain.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +10,9 @@ import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The type User.
+ */
 @Entity
 @Data
 @SuperBuilder
@@ -20,4 +24,5 @@ public class User {
     private String username;
     private String password;
     private String address;
+    private Role role;
 }

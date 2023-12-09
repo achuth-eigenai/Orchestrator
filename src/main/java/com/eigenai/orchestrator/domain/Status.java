@@ -1,5 +1,19 @@
 package com.eigenai.orchestrator.domain;
 
+/**
+ * The enum Status.
+ */
 public enum Status {
-    SUCCESS, FAILURE, ACCEPTED
+    /**
+     * Success status.
+     */
+    SUCCESS,
+    /**
+     * Failure status.
+     */
+    FAILURE,
+    /**
+     * Accepted status.
+     */
+    ACCEPTED
 }
