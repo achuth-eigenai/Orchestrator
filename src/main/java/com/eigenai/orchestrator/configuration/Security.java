@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class Security {
 
     private final CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
