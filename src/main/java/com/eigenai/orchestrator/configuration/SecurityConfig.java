@@ -2,12 +2,17 @@ package com.eigenai.orchestrator.configuration;
 
 import com.eigenai.orchestrator.handler.CustomLogoutHandler;
 import com.eigenai.orchestrator.handler.CustomizeAuthenticationSuccessHandler;
+import com.eigenai.orchestrator.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -24,8 +29,9 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Configuration
-//@EnableWebSecurity
-public class Security {
+@EnableWebSecurity
+public class SecurityConfig {
+    private static final String[] SWAGGER_PATHS = {"/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**"};
 
     private final CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
     @Value("${aws.cognito.logoutUrl}")
@@ -42,7 +48,7 @@ public class Security {
      *
      * @param customizeAuthenticationSuccessHandler the customize authentication success handler
      */
-    public Security(CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler) {
+    public SecurityConfig(CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler) {
         this.customizeAuthenticationSuccessHandler = customizeAuthenticationSuccessHandler;
     }
 
@@ -68,6 +74,7 @@ public class Security {
 
     /**
      * Security filter chain security filter chain.
+     * add this for permitting SWAGGER_PATHS  .requestMatchers(SWAGGER_PATHS).permitAll()
      *
      * @param http the http
      * @return the security filter chain
@@ -75,8 +82,11 @@ public class Security {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request.requestMatchers("/v1/general/*").permitAll()
-                        .requestMatchers("/v1/user").hasAnyRole("ADMIN", "USER").anyRequest().authenticated())
+        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request ->
+                        request
+                        .requestMatchers("/v1/user/login").permitAll()
+                                .requestMatchers("/v1/user/*").authenticated()
+                )
                 .oauth2Login(oauth -> oauth.redirectionEndpoint(endPoint -> endPoint.baseUri("/login/oauth2/code/cognito"))
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userAuthoritiesMapper(userAuthoritiesMapper()))
                         .successHandler(customizeAuthenticationSuccessHandler))

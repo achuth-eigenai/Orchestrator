@@ -1,24 +1,27 @@
 package com.eigenai.orchestrator.controller;
 
-import com.eigenai.orchestrator.domain.User;
-import com.eigenai.orchestrator.service.UserService;
-import com.eigenai.orchestrator.vo.Response;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import static com.eigenai.orchestrator.domain.Status.SUCCESS;
+import static org.springframework.http.ResponseEntity.ok;
 
 /**
  * The type User controller.
  */
 @RestController
 @OpenAPIDefinition
-@RequestMapping("v1/general")
+@RequestMapping("v1/public")
 public class GeneralController {
-	@GetMapping("/welcome")
-	public ResponseEntity<String> login() {
-		return ResponseEntity.ok("Hello!");
-	}
+    /**
+     * Login response entity.
+     *
+     * @return the response entity
+     */
+    @GetMapping("/build-version")
+    public ResponseEntity<String> login() {
+        return ok("We are currently at v1.0.0! \nThis is a basic version of our EigenAI but by the time you use it, its going to be the best product in the market!");
+    }
 }

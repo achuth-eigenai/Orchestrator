@@ -1,10 +1,7 @@
 package com.eigenai.orchestrator.controller;
 
-import com.eigenai.orchestrator.domain.Account;
-import com.eigenai.orchestrator.domain.PaymentPlan;
 import com.eigenai.orchestrator.domain.PaymentPlan;
 import com.eigenai.orchestrator.vo.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
