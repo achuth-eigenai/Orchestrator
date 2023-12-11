@@ -1,15 +1,6 @@
 package com.eigenai.orchestrator.handler;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-
-public class CustomLogoutHandler extends SimpleUrlLogoutSuccessHandler {
+public class CustomLogoutHandler /*extends SimpleUrlLogoutSuccessHandler*/ {
 
     private final String logoutUrl;
     private final String logoutRedirectUrl;
@@ -21,15 +12,15 @@ public class CustomLogoutHandler extends SimpleUrlLogoutSuccessHandler {
         this.clientId = clientId;
     }
 
-    @Override
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
-        return UriComponentsBuilder
-                .fromUri(URI.create(logoutUrl))
-                .queryParam("client_id", clientId)
-                .queryParam("logout_uri", logoutRedirectUrl)
-                .encode(StandardCharsets.UTF_8)
-                .build()
-                .toUriString();
-    }
+//    @Override
+//    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
+//                                        Authentication authentication) {
+//        return UriComponentsBuilder
+//                .fromUri(URI.create(logoutUrl))
+//                .queryParam("client_id", clientId)
+//                .queryParam("logout_uri", logoutRedirectUrl)
+//                .encode(StandardCharsets.UTF_8)
+//                .build()
+//                .toUriString();
+//    }
 }

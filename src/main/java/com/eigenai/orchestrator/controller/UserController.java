@@ -3,26 +3,23 @@ package com.eigenai.orchestrator.controller;
 import com.eigenai.orchestrator.domain.User;
 import com.eigenai.orchestrator.service.UserService;
 import com.eigenai.orchestrator.vo.Response;
-import com.eigenai.orchestrator.vo.UserLoginRequest;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.util.Map;
 
+import static com.eigenai.orchestrator.constant.SecurityConstants.IS_SHOPIFY;
 import static com.eigenai.orchestrator.domain.Status.SUCCESS;
 
 /**
  * The type User controller.
  */
+@Slf4j
 @RestController
 @OpenAPIDefinition
 @RequestMapping("v1/user")
@@ -58,8 +55,12 @@ public class UserController {
      * @param principal the principal
      * @return the details
      */
-    @GetMapping("/user-info")
-    public ResponseEntity<Principal> getDetails(Principal principal) {
+    @GetMapping("/info")
+    @PreAuthorize(IS_SHOPIFY)
+    public ResponseEntity<Principal> getDetails(@RequestHeader Map<String, String> headers, Principal principal) {
+        headers.forEach((key, value) -> {
+            log.info(String.format("Header '%s' = %s", key, value));
+        });
         return ResponseEntity.ok(principal);
     }
 
@@ -85,11 +86,11 @@ public class UserController {
         return ResponseEntity.ok(Response.builder().status(SUCCESS).build());
     }
 
-    @Autowired
-    private ClientRegistrationRepository clientRegistrationRepository;
+//    @Autowired
+//    private ClientRegistrationRepository clientRegistrationRepository;
 
-    @Value("${spring.security.oauth2.client.registration.cognito.token-uri}")
-    private String tokenUri;
+//    @Value("${spring.security.oauth2.client.registration.cognito.token-uri}")
+//    private String tokenUri;
 
     /**
      * Login response entity.
@@ -97,22 +98,22 @@ public class UserController {
      * @param userLoginRequest the userLoginRequest
      * @return the response entity
      */
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
-        try {
-            ClientRegistration registration = clientRegistrationRepository.findByRegistrationId("cognito");
-            String tokenEndpoint = tokenUri;
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.setBasicAuth(registration.getClientId(), registration.getClientSecret());
-            String requestBody = String.format("grant_type=client_credentials&username=%s&password=%s", userLoginRequest.getUsername(), userLoginRequest.getPassword());
-            HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.postForEntity(tokenEndpoint, request, String.class);
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok("No..");
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
+//        try {
+//            ClientRegistration registration = clientRegistrationRepository.findByRegistrationId("cognito");
+//            String tokenEndpoint = tokenUri;
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//            headers.setBasicAuth(registration.getClientId(), registration.getClientSecret());
+//            String requestBody = String.format("grant_type=client_credentials&username=%s&password=%s", userLoginRequest.getUsername(), userLoginRequest.getPassword());
+//            HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+//            RestTemplate restTemplate = new RestTemplate();
+//            ResponseEntity<String> response = restTemplate.postForEntity(tokenEndpoint, request, String.class);
+//            return response;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.ok("No..");
+//        }
+//    }
 }
