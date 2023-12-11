@@ -2,14 +2,10 @@ package com.eigenai.orchestrator.configuration;
 
 import com.eigenai.orchestrator.handler.CustomLogoutHandler;
 import com.eigenai.orchestrator.handler.CustomizeAuthenticationSuccessHandler;
-import com.eigenai.orchestrator.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -84,8 +80,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request ->
                         request
-                        .requestMatchers("/v1/user/login").permitAll()
-                                .requestMatchers("/v1/user/*").authenticated()
+                                .requestMatchers("/v1/public/**").permitAll()
+                                .requestMatchers("/v1/user/*").hasAnyRole("ADMIN", "USER").anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth.redirectionEndpoint(endPoint -> endPoint.baseUri("/login/oauth2/code/cognito"))
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userAuthoritiesMapper(userAuthoritiesMapper()))

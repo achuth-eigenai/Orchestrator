@@ -20,7 +20,7 @@ public class GeneralController {
      *
      * @return the response entity
      */
-    @GetMapping("/build-version")
+    @GetMapping("/welcome")
     public ResponseEntity<String> login() {
         return ok("We are currently at v1.0.0! \nThis is a basic version of our EigenAI but by the time you use it, its going to be the best product in the market!");
     }

@@ -11,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
 
-import static com.eigenai.orchestrator.constant.SecurityConstants.IS_ADMIN;
 import static com.eigenai.orchestrator.domain.Status.SUCCESS;
 
 /**
@@ -49,7 +47,6 @@ public class UserController {
      * @param user the user input
      * @return the user
      */
-    @PreAuthorize(IS_ADMIN)
     @PostMapping("/create-employee")
     public ResponseEntity<User> createEmployee(@RequestBody User user) {
         return ResponseEntity.ok(userService.createOrUpdate(user));
