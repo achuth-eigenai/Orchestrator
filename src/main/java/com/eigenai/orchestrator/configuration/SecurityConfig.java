@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(c -> c
                         .requestMatchers(SWAGGER_PATHS).permitAll()
                         .requestMatchers("/v1/user/**").hasAuthority("SCOPE_eigenai-resource-server/shopify-app")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(CorsConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
